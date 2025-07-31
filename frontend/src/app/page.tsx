@@ -6,7 +6,6 @@ import { Category, Product } from "./models";
 import ProductCard from "./components/ProductCard";
 import axios from "axios";
 
-
 const Products: Product[] = [
   {
     id: 1,
@@ -40,7 +39,7 @@ const Products: Product[] = [
     starRating: 2.5,
     price: 499,
   },
-    {
+  {
     id: 5,
     name: "Sonos Pro Audio",
     image: "/pro-audio.jpg",
@@ -48,7 +47,7 @@ const Products: Product[] = [
     starRating: 3.5,
     price: 175,
   },
-]
+];
 
 const Categories: Category[] = [
   { id: 1, name: "Headphones", image: "/headphone.jpg" },
@@ -66,8 +65,8 @@ const Categories: Category[] = [
 export default function HomePage() {
   const router = useRouter();
   const [user, setUser] = useState<string | null>(null);
-  const [categories, setCategories] = useState<Category[]>([])
-  const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -79,27 +78,33 @@ export default function HomePage() {
       // Replace this with real JWT decoding in real apps
       const username = "admin"; // You can decode the token here if needed
       setUser(username);
-      fetchCategories()
-      fetchProducts()
+      fetchCategories();
+      fetchProducts();
       setLoading(false);
     }
   }, []);
 
   const fetchCategories = async () => {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_DOMAIN}/categories`,{
-      headers: { 'Authorization': `Bearer ${token}`}
-    })
-    setCategories(response.data)
-  }
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/categories`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    setCategories(response.data);
+  };
 
   const fetchProducts = async () => {
     const token = localStorage.getItem("token");
-    const response = await axios.get(`${process.env.NEXT_PUBLIC_API_DOMAIN}/products`,{
-      headers: { 'Authorization': `Bearer ${token}`}
-    })
-    setProducts(response.data)
-  }
+    const response = await axios.get(
+      `${process.env.NEXT_PUBLIC_API_DOMAIN}/products`,
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      },
+    );
+    setProducts(response.data);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -132,13 +137,13 @@ export default function HomePage() {
         </div>
         <div className="mt-8 flex h-[550px] items-center bg-[url('/sonos-image.jpg')] bg-cover bg-center p-8">
           <div className="w-1/2">
-            <div className="border-1 items-center, inline-block justify-center rounded-full border-white px-4 py-2 text-white">
+            <div className="items-center, inline-block justify-center rounded-full border-1 border-white px-4 py-2 text-white">
               <p className="text-xs">Premium Sound</p>
             </div>
             <h1 className="mt-4 text-4xl font-bold text-white">
               Unleash Powerful Sound - Anytime, Anywhere.
             </h1>
-            <p className="mb-6 mt-4 text-white">
+            <p className="mt-4 mb-6 text-white">
               Discover top-rated headphones, speakers wich rich bass,
               crystal-clear audio, and seamless wireless connection.
             </p>
@@ -190,7 +195,10 @@ export default function HomePage() {
         <p className="mt-8 mb-6 text-lg font-semibold">Our Bestsellers</p>
         <div className="grid grid-cols-4 gap-6">
           {products.map((product) => (
-            <div key={product.id} className="flex justify-center">
+            <div
+              key={product.id}
+              onClick={() => router.push(`product/${product.id}`)}
+            >
               <ProductCard product={product} />
             </div>
           ))}

@@ -28,3 +28,7 @@ async def createCategory(db: db_dependency, request: CreateRequest, current_user
 @router.get('/')
 async def getProducts(db: db_dependency, current_user: user_dependency):
     return db.query(Product).options(joinedload(Product.category)).order_by(Product.id).all()
+
+@router.get('/{product_id}')
+async def getProductDetail(db: db_dependency, product_id: int, current_user: user_dependency):
+    return db.query(Product).filter(Product.id == product_id).options(joinedload(Product.category)).first()
